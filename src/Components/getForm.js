@@ -13,50 +13,59 @@ class getForm extends Component {
     }
     changeHandler = (event) => {
         const query = event.target.value
+        console.log(query)
         this.setState({
             queryString : query
         })
     }
     async onSubmitHandler(event) {
         event.preventDefault();
-        await axios.get('https://vpsapg.dixsoft.online/product/get?prod_name=' + this.state.queryString)
+        if(this.state.queryString.length === 0){
+            alert('Provide Details')
+            this.setState({
+                showTable : false
+            })
+            return;
+        }
+        await axios.get('http://localhost:8080/products/get?prod_name=' + this.state.queryString)
             .then((response) => {
-                if(this.state.products.length === 0){ 
-                    alert('Provide details to search')
-                    return;
-                }
+                console.log(response)
                 if(response.data.success === 1){
                     this.setState({
                         products : response.data.data,
                         queryString : '',
                         showTable : true
                     })
-                }else{
+                }else if(response.data.success === 2){ 
                     this.setState({
                         queryString : '',
                         errorMessage : true
                     })
+                   
                 }
             }).catch((error) => {
                 console.log(error)
             })
     }
+
+    newProductForm = () => 
+    <form onSubmit={this.onSubmitHandler}>
+        <input 
+            placeholder="Search Products"
+            value = {this.state.queryString}
+            onSubmit = {this.changeHandler}
+        ></input>
+        <input 
+            type="submit"
+            value="submit"
+        />
+    </form>
     
     render() {
         return (
             <div>
                 <h2>List Of Products</h2>
-                <form onSubmit={this.onSubmitHandler}>
-                <input 
-                    placeholder="Search Products"
-                    value = {this.state.queryString}
-                    onChange = {this.changeHandler}
-                ></input>
-                <input 
-                    type="submit"
-                    value="submit"
-                />
-                </form>
+                {this.newProductForm()}
                 {
                     this.state.showTable ? 
                     <table>

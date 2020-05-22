@@ -19,9 +19,10 @@ class postForm extends Component {
         e.preventDefault()
         if(this.state.model.length === 0 || this.state.cost.length === 0) {
             alert('Provide required details!')
+            return;
         }
         const self = this
-        axios.post('https://vpsapg.dixsoft.online/product/save?prod_name=' + this.state.model + '&unit_cost=' + this.state.cost)
+        axios.post('http://localhost:8080/products/save?prod_name=' + this.state.model + '&unit_cost=' + this.state.cost)
             .then(response => {
                 console.log(response)
                 if(response.data.success === 1){
@@ -39,7 +40,7 @@ class postForm extends Component {
         const { model , cost } = this.state
         return (
             <div>
-                <h2>Create Products</h2>
+                <h2>Create products</h2>
                 <form onSubmit={this.submitHandler}>
                     <div>
                         <input type="text"
