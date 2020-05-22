@@ -13,7 +13,6 @@ class getForm extends Component {
     }
     changeHandler = (event) => {
         const query = event.target.value
-        console.log(query)
         this.setState({
             queryString : query
         })
@@ -53,7 +52,7 @@ class getForm extends Component {
         <input 
             placeholder="Search Products"
             value = {this.state.queryString}
-            onSubmit = {this.changeHandler}
+            onChange = {this.changeHandler}
         ></input>
         <input 
             type="submit"
